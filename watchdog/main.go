@@ -18,6 +18,10 @@ import (
 	"github.com/alexellis/faas/watchdog/types"
 )
 
+const (
+	lockfile = ".lock"
+)
+
 func buildFunctionInput(config *WatchdogConfig, r *http.Request) ([]byte, error) {
 	var res []byte
 	var requestBytes []byte
@@ -36,6 +40,10 @@ func buildFunctionInput(config *WatchdogConfig, r *http.Request) ([]byte, error)
 		res = requestBytes
 	}
 	return res, err
+}
+
+func buildLockfilePath() string {
+	return os.TempDir() + string(os.PathSeparator) + lockfile
 }
 
 func debugHeaders(source *http.Header, direction string) {
@@ -252,13 +260,11 @@ func main() {
 
 	http.HandleFunc("/", makeRequestHandler(&config))
 
-	if config.suppressLock == false {
-		path := "/tmp/.lock"
-		log.Printf("Writing lock-file to: %s\n", path)
-		writeErr := ioutil.WriteFile(path, []byte{}, 0660)
-		if writeErr != nil {
-			log.Panicf("Cannot write %s. To disable lock-file set env suppress_lock=true.\n Error: %s.\n", path, writeErr.Error())
-		}
+	path := buildLockfilePath()
+	log.Printf("Writing lock-file to: %s\n", path)
+	writeErr := ioutil.WriteFile(path, []byte{}, 0660)
+	if writeErr != nil {
+		log.Panicf("Cannot write %s.\n Error: %s.\n", path, writeErr.Error())
 	}
 	log.Fatal(s.ListenAndServe())
 }

@@ -78,8 +78,6 @@ func (ReadConfig) Read(hasEnv HasEnv) WatchdogConfig {
 	cfg.marshalRequest = parseBoolValue(hasEnv.Getenv("marshal_request"))
 	cfg.debugHeaders = parseBoolValue(hasEnv.Getenv("debug_headers"))
 
-	cfg.suppressLock = parseBoolValue(hasEnv.Getenv("suppress_lock"))
-
 	cfg.contentType = hasEnv.Getenv("content_type")
 
 	return cfg
@@ -111,9 +109,6 @@ type WatchdogConfig struct {
 
 	// prints out all incoming and out-going HTTP headers
 	debugHeaders bool
-
-	// Don't write a lock file to /tmp/
-	suppressLock bool
 
 	// contentType forces a specific pre-defined value for all responses
 	contentType string

@@ -89,19 +89,6 @@ func TestRead_WriteDebug_TrueConfig(t *testing.T) {
 	}
 }
 
-func TestRead_SuppressLockConfig(t *testing.T) {
-	defaults := NewEnvBucket()
-	readConfig := ReadConfig{}
-	defaults.Setenv("suppress_lock", "true")
-
-	config := readConfig.Read(defaults)
-
-	if config.suppressLock != true {
-		t.Logf("suppress_lock envVariable incorrect, got: %s.\n", config.faasProcess)
-		t.Fail()
-	}
-}
-
 func TestRead_ContentTypeConfig(t *testing.T) {
 	defaults := NewEnvBucket()
 	readConfig := ReadConfig{}

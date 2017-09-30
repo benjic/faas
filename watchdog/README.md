@@ -59,7 +59,7 @@ ENV fprocess="cat /etc/hostname"
 HEALTHCHECK --interval=5s CMD [ -e /tmp/.lock ] || exit 1
 ```
 
-The watchdog process creates a .lock file in `/tmp/` on starting its internal Golang HTTP server. `[ -e file_name ]` is shell to check if a file exists. With Windows Containers this is an invalid path so you may want to set the `suppress_lock` environmental variable.
+The watchdog process creates a .lock file in `/tmp/` on starting its internal Golang HTTP server. `[ -e file_name ]` is shell to check if a file exists.
 
 Read my Docker Swarm tutorial on Healthchecks:
 
@@ -77,7 +77,6 @@ The watchdog can be configured through environmental variables. You must always 
 | `content_type`         | Force a specific Content-Type response for all responses. |
 | `write_timeout`        | HTTP timeout for writing a response body from your function (in seconds)  |
 | `read_timeout`         | HTTP timeout for reading the payload from the client caller (in seconds) |
-| `suppress_lock`        | The watchdog will attempt to write a lockfile to /tmp/ for swarm healthchecks - set this to true to disable behaviour. |
 | `exec_timeout`         | Hard timeout for process exec'd for each incoming request (in seconds). Disabled if set to 0. |
  
 
